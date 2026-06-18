@@ -1,0 +1,32 @@
+name: Verilator Lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Install Verilator
+        run: |
+          sudo apt update
+          sudo apt install -y verilator
+
+      - name: Run Custom Action
+        id: lint
+
+        uses: Manusvs/verilator-lint-action@v1
+
+        with:
+          files: "rtl/alu.sv"
+          severity: warning
+
+      - name: Print Results
+        run: |
+          echo '${{ steps.lint.outputs.result }}'
